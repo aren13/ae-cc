@@ -1,0 +1,22 @@
+{
+  "name": "ae-cc",
+  "description": "Curated Claude Code skills and commands for prompt engineering, MCP servers, subagents, hooks, and productivity workflows",
+  "version": "1.0.0",
+  "author": {
+    "name": "Aren",
+    "email": "ae@codemose.com"
+  },
+  "homepage": "https://github.com/aren_13/ae-cc",
+  "repository": "https://github.com/aren_13/ae-cc",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "prompts",
+    "mcp-servers",
+    "subagents",
+    "hooks",
+    "slash-commands",
+    "prompt-engineering",
+    "meta-prompting"
+  ]
+}
