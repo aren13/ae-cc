@@ -2,8 +2,7 @@
 
 A growing collection of custom Claude Code resources built for real workflows. 
 
-PS: Original repo and work -> TÂCHES's https://github.com/glittercowboy/taches-cc-resources/ repo. 
-Please use the original repo if you are starting this journey.
+
 
 ## What's Inside
 
@@ -212,6 +211,8 @@ More resources coming soon.
 
 ---
 
+PS: Original repo and work -> TÂCHES's https://github.com/glittercowboy/taches-cc-resources/ repo.
+Please use the original repo if you are starting this journey.
 **Community Ports:** [OpenCode](https://github.com/stephenschoettler/taches-oc-prompts)
 
 —Aren
