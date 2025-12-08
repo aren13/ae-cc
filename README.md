@@ -75,7 +75,7 @@ Capture ideas mid-conversation without derailing current work. Resume later with
 
 ### Context Handoff
 
-Create structured handoff documents to continue work in a fresh context. Reference with `@whats-next.md` to resume seamlessly.
+Create structured handoff documents to continue work in a fresh context. Reference with `@./ae-cc/whats-next.md` to resume seamlessly.
 
 - [`/whats-next`](./commands/whats-next.md) - Create handoff document for fresh context
 

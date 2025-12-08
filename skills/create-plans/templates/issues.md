@@ -2,7 +2,7 @@
 
 This file is auto-created when Rule 5 (Log non-critical enhancements) is first triggered during execution.
 
-Location: `.planning/ISSUES.md`
+Location: `./ae-cc/planning/ISSUES.md`
 
 ```markdown
 # Project Issues Log

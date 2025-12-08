@@ -3,7 +3,7 @@
 <required_reading>
 **Read these files NOW:**
 1. templates/roadmap.md
-2. Read `.planning/BRIEF.md` if it exists
+2. Read `./ae-cc/planning/BRIEF.md` if it exists
 </required_reading>
 
 <purpose>
@@ -15,7 +15,7 @@ that delivers value. The roadmap provides structure, not detailed tasks.
 
 <step name="check_brief">
 ```bash
-cat .planning/BRIEF.md 2>/dev/null || echo "No brief found"
+cat ./ae-cc/planning/BRIEF.md 2>/dev/null || echo "No brief found"
 ```
 
 **If no brief exists:**
@@ -71,22 +71,22 @@ Loop until "Create roadmap" selected.
 
 <step name="create_structure">
 ```bash
-mkdir -p .planning/phases
+mkdir -p ./ae-cc/planning/phases
 ```
 </step>
 
 <step name="write_roadmap">
 Use template from `templates/roadmap.md`.
 
-Write to `.planning/ROADMAP.md` with:
+Write to `./ae-cc/planning/ROADMAP.md` with:
 - Phase list with names and one-line descriptions
 - Dependencies (what must complete before what)
 - Status tracking (all start as "not started")
 
 Create phase directories:
 ```bash
-mkdir -p .planning/phases/01-{phase-name}
-mkdir -p .planning/phases/02-{phase-name}
+mkdir -p ./ae-cc/planning/phases/01-{phase-name}
+mkdir -p ./ae-cc/planning/phases/02-{phase-name}
 # etc.
 ```
 </step>
@@ -95,7 +95,7 @@ mkdir -p .planning/phases/02-{phase-name}
 Commit project initialization (brief + roadmap together):
 
 ```bash
-git add .planning/
+git add ./ae-cc/planning/
 git commit -m "$(cat <<'EOF'
 docs: initialize [project-name] ([N] phases)
 
@@ -115,8 +115,8 @@ Confirm: "Committed: docs: initialize [project] ([N] phases)"
 <step name="offer_next">
 ```
 Project initialized:
-- Brief: .planning/BRIEF.md
-- Roadmap: .planning/ROADMAP.md
+- Brief: ./ae-cc/planning/BRIEF.md
+- Roadmap: ./ae-cc/planning/ROADMAP.md
 - Committed as: docs: initialize [project] ([N] phases)
 
 What's next?
@@ -150,7 +150,7 @@ Phases are buckets of work, not project management artifacts.
 
 <success_criteria>
 Roadmap is complete when:
-- [ ] `.planning/ROADMAP.md` exists
+- [ ] `./ae-cc/planning/ROADMAP.md` exists
 - [ ] 3-6 phases defined with clear names
 - [ ] Phase directories created
 - [ ] Dependencies noted if any

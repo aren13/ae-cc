@@ -42,10 +42,10 @@ SUMMARY.md        → Outcome (existence = phase complete)
 
 ## Directory Structure
 
-All planning artifacts go in `.planning/`:
+All planning artifacts go in `./ae-cc/planning/`:
 
 ```
-.planning/
+./ae-cc/planning/
 ├── BRIEF.md                    # Project vision
 ├── ROADMAP.md                  # Phase structure + tracking
 └── phases/

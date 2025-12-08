@@ -48,7 +48,7 @@ mkdir -p .planning
 <step name="write_brief">
 Use the template from `templates/brief.md`.
 
-Write to `.planning/BRIEF.md` with:
+Write to `./ae-cc/planning/BRIEF.md` with:
 - Project name
 - One-line description
 - Problem statement (why this exists)
@@ -63,7 +63,7 @@ Write to `.planning/BRIEF.md` with:
 After creating brief, present options:
 
 ```
-Brief created: .planning/BRIEF.md
+Brief created: ./ae-cc/planning/BRIEF.md
 
 NOTE: Brief is NOT committed yet. It will be committed with the roadmap as project initialization.
 
@@ -88,7 +88,7 @@ Keep it focused: What, Why, Success, Constraints.
 
 <success_criteria>
 Brief is complete when:
-- [ ] `.planning/BRIEF.md` exists
+- [ ] `./ae-cc/planning/BRIEF.md` exists
 - [ ] Contains: name, description, problem, success criteria
 - [ ] Under 50 lines
 - [ ] User knows what's next

@@ -23,7 +23,7 @@ Milestones mark shipped versions. They solve the "what happens after v1.0?" prob
 
 **Planning structure:**
 ```
-.planning/
+./ae-cc/planning/
 ├── BRIEF.md              # Original vision
 ├── ROADMAP.md            # Phases 1-4
 └── phases/
@@ -63,7 +63,7 @@ Milestones mark shipped versions. They solve the "what happens after v1.0?" prob
 
 **Planning structure:**
 ```
-.planning/
+./ae-cc/planning/
 ├── BRIEF.md              # Updated with "Current State"
 ├── ROADMAP.md            # Phases 1-6 (grouped by milestone)
 ├── MILESTONES.md         # v1.0 entry
@@ -144,8 +144,8 @@ When planning Phase 5, the PLAN.md automatically gets context:
 
 ```markdown
 <context>
-@.planning/BRIEF.md                      # Knows: v1.0 shipped, codebase exists
-@.planning/MILESTONES.md                 # Knows: what v1.0 delivered
+@./ae-cc/planning/BRIEF.md                      # Knows: v1.0 shipped, codebase exists
+@./ae-cc/planning/MILESTONES.md                 # Knows: what v1.0 delivered
 @AppName/NetworkManager.swift            # Existing code to improve
 @AppName/APIClient.swift                 # Existing code to fix
 </context>
@@ -178,7 +178,7 @@ When planning Phase 5, the PLAN.md automatically gets context:
 
 **Planning structure:**
 ```
-.planning/
+./ae-cc/planning/
 ├── BRIEF.md              # Updated for v2.0 vision
 ├── ROADMAP.md            # Phases 1-14 (grouped)
 ├── MILESTONES.md         # v1.0, v1.1 entries
@@ -243,7 +243,7 @@ When planning Phase 5, the PLAN.md automatically gets context:
 
 **Action:**
 ```
-.planning/
+./ae-cc/planning/
 ├── archive/
 │   └── v1-macos/
 │       ├── BRIEF.md
@@ -274,7 +274,7 @@ When planning Phase 5, the PLAN.md automatically gets context:
 - Built: WeatherBar (weather app) ✓
 - Now building: TaskBar (task management app)
 
-**Action:** New project entirely, new `.planning/` directory
+**Action:** New project entirely, new `./ae-cc/planning/` directory
 
 **Why:** Completely different product, no relationship.
 
@@ -368,8 +368,8 @@ Create authentication system from scratch.
 </objective>
 
 <context>
-@.planning/BRIEF.md
-@.planning/ROADMAP.md
+@./ae-cc/planning/BRIEF.md
+@./ae-cc/planning/ROADMAP.md
 </context>
 
 <tasks>
@@ -389,8 +389,8 @@ Add MFA to existing authentication system.
 </objective>
 
 <context>
-@.planning/BRIEF.md              # Shows v1.0 shipped, auth exists
-@.planning/MILESTONES.md         # Shows what v1.0 delivered
+@./ae-cc/planning/BRIEF.md              # Shows v1.0 shipped, auth exists
+@./ae-cc/planning/MILESTONES.md         # Shows what v1.0 delivered
 @src/models/User.ts              # Existing User model
 @src/auth/AuthService.ts         # Existing auth logic
 </context>
@@ -486,7 +486,7 @@ Plans automatically become brownfield-aware because BRIEF says "this is what we 
 
 **Archive (rare):**
 - Only for separate codebases or different products
-- Move `.planning/` to `.planning/archive/v1-name/`
+- Move `./ae-cc/planning/` to `./ae-cc/planning/archive/v1-name/`
 - Start fresh with new BRIEF/ROADMAP
 - New planning references old in context
 

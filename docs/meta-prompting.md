@@ -45,10 +45,10 @@ cp run-prompt.md ~/.claude/commands/
 
 ```bash
 cd /your/project
-mkdir .prompts
+mkdir ./ae-cc/prompts
 ```
 
-The `/create-prompt` and `/run-prompt` commands are available everywhere. Each project stores its prompts in `.prompts/` in the working directory.
+The `/create-prompt` and `/run-prompt` commands are available everywhere. Each project stores its prompts in `./ae-cc/prompts/` in the working directory.
 
 ## Usage
 
@@ -124,18 +124,18 @@ For complex projects, Claude may break your request into multiple prompts:
   run-prompt.md
 
 /your/project/              # Each project has its own prompts
-  .prompts/
+  ./ae-cc/prompts/
     ├── 001-implement-auth.md
     ├── 002-create-dashboard.md
     └── completed/
         └── 001-implement-auth.md  # Archived after execution
 
 /another/project/           # Different project, different prompts
-  .prompts/
+  ./ae-cc/prompts/
     └── 001-setup-database.md
 ```
 
-After successful execution, prompts are automatically moved to `.prompts/completed/` with metadata.
+After successful execution, prompts are automatically moved to `./ae-cc/prompts/completed/` with metadata.
 
 ## Why This Works
 

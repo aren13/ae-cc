@@ -8,7 +8,7 @@ You're deep in a conversation, made significant progress, but need to start a fr
 
 ## The Solution
 
-`/whats-next` analyzes the current conversation and creates a structured handoff document (`whats-next.md`) in your working directory. In your next chat, reference it with `@whats-next.md` to continue seamlessly.
+`/whats-next` analyzes the current conversation and creates a structured handoff document (`./ae-cc/whats-next.md`) in your working directory. In your next chat, reference it with `@./ae-cc/whats-next.md` to continue seamlessly.
 
 ## Command
 
@@ -96,23 +96,23 @@ Implement user authentication with JWT tokens
 **Install globally** - works in any directory:
 
 ```bash
-cp whats-next.md ~/.claude/commands/
+cp ./ae-cc/whats-next.md ~/.claude/commands/
 ```
 
-The command works everywhere. Each project gets its own `whats-next.md` in the working directory.
+The command works everywhere. Each project gets its own `./ae-cc/whats-next.md` in the working directory.
 
 ## Usage
 
 **End of current conversation:**
 ```
 You: /whats-next
-Claude: [Analyzes conversation, writes whats-next.md]
-✓ Created whats-next.md - reference with @whats-next.md in a new chat to continue
+Claude: [Analyzes conversation, writes ./ae-cc/whats-next.md]
+✓ Created ./ae-cc/whats-next.md - reference with @./ae-cc/whats-next.md in a new chat to continue
 ```
 
 **Start of new conversation:**
 ```
-You: @whats-next.md continue this work
+You: @./ae-cc/whats-next.md continue this work
 Claude: [Reads handoff document, understands context, resumes work]
 ```
 
@@ -124,13 +124,13 @@ You: "Build a user dashboard with real-time analytics"
 Claude: [Works on task, creates components, sets up data fetching...]
 You: /whats-next
 
-✓ Created whats-next.md
+✓ Created ./ae-cc/whats-next.md
 ```
 
 **Conversation 2 (fresh context):**
 ```
-You: @whats-next.md finish this
-Claude: [Reads whats-next.md]
+You: @./ae-cc/whats-next.md finish this
+Claude: [Reads ./ae-cc/whats-next.md]
 "I see we've completed the dashboard layout and real-time data
 connection. Still need to add the chart components and error handling.
 Continuing from src/components/Dashboard.tsx:67..."
@@ -141,24 +141,24 @@ Continuing from src/components/Dashboard.tsx:67..."
 **Global (install once):**
 ```
 ~/.claude/commands/
-  whats-next.md         # Command
+  ./ae-cc/whats-next.md         # Command
 ```
 
 **Per-project (created when needed):**
 ```
 /your/project/
-  whats-next.md         # Handoff document for this project
+  ./ae-cc/whats-next.md         # Handoff document for this project
 
 /another/project/
-  whats-next.md         # Different project's handoff
+  ./ae-cc/whats-next.md         # Different project's handoff
 ```
 
 ## Tips
 
 - Use `/whats-next` when context feels full or cluttered
-- Reference with `@whats-next.md` in new chats for seamless continuation
+- Reference with `@./ae-cc/whats-next.md` in new chats for seamless continuation
 - The file is overwritten each time - it's a snapshot, not a log
-- Delete `whats-next.md` when work is complete
+- Delete `./ae-cc/whats-next.md` when work is complete
 - Works great with `/add-to-todos` for long-term task tracking
 
 ## Integration
@@ -167,7 +167,7 @@ Continuing from src/components/Dashboard.tsx:67..."
 - `/whats-next` for immediate continuation (same session/day)
 - `/add-to-todos` for longer-term backlog (weeks/months)
 
-Use whats-next.md for "I'll finish this after lunch" and TO-DOS.md for "I'll get to this eventually."
+Use ./ae-cc/whats-next.md for "I'll finish this after lunch" and ./ae-cc/TO-DOS.md for "I'll get to this eventually."
 
 ---
 

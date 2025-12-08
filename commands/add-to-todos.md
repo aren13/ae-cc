@@ -15,7 +15,7 @@ allowed-tools:
 
 ## Instructions
 
-1. Read TO-DOS.md in the working directory (create with Write tool if it doesn't exist)
+1. Read ./ae-cc/TO-DOS.md in the working directory (create with Write tool if it doesn't exist)
 
 2. Check for duplicates:
    - Extract key concept/action from the new todo

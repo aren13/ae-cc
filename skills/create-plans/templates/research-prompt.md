@@ -109,7 +109,7 @@ This ensures zero lost work if token limits are hit.
 Step 1 - Initialize:
 ```bash
 # Create skeleton file
-cat > .planning/phases/XX-name/FINDINGS.md <<'EOF'
+cat > ./ae-cc/planning/phases/XX-name/FINDINGS.md <<'EOF'
 # [Topic] Research Findings
 
 ## Summary
@@ -138,7 +138,7 @@ Complete Summary, Recommendations, and Metadata sections
 </incremental_output>
 
 <output_structure>
-Create `.planning/phases/XX-name/FINDINGS.md`:
+Create `./ae-cc/planning/phases/XX-name/FINDINGS.md`:
 
 # [Topic] Research Findings
 

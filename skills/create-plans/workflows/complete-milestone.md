@@ -3,8 +3,8 @@
 <required_reading>
 **Read these files NOW:**
 1. templates/milestone.md
-2. `.planning/ROADMAP.md`
-3. `.planning/BRIEF.md`
+2. `./ae-cc/planning/ROADMAP.md`
+3. `./ae-cc/planning/BRIEF.md`
 </required_reading>
 
 <purpose>
@@ -19,8 +19,8 @@ This is the ritual that separates "development" from "shipped."
 Check if milestone is truly complete:
 
 ```bash
-cat .planning/ROADMAP.md
-ls .planning/phases/*/SUMMARY.md 2>/dev/null | wc -l
+cat ./ae-cc/planning/ROADMAP.md
+ls ./ae-cc/planning/phases/*/SUMMARY.md 2>/dev/null | wc -l
 ```
 
 **Questions to ask:**
@@ -91,8 +91,8 @@ Confirm before proceeding.
 Read all phase SUMMARY.md files in milestone range:
 
 ```bash
-cat .planning/phases/01-*/01-*-SUMMARY.md
-cat .planning/phases/02-*/02-*-SUMMARY.md
+cat ./ae-cc/planning/phases/01-*/01-*-SUMMARY.md
+cat ./ae-cc/planning/phases/02-*/02-*-SUMMARY.md
 # ... for each phase in milestone
 ```
 
@@ -114,7 +114,7 @@ If "adjust": User can add/remove/edit accomplishments.
 </step>
 
 <step name="create_milestone_entry">
-Create or update `.planning/MILESTONES.md`.
+Create or update `./ae-cc/planning/MILESTONES.md`.
 
 If file doesn't exist:
 ```markdown
@@ -154,7 +154,7 @@ Confirm entry looks correct.
 </step>
 
 <step name="update_brief">
-Update `.planning/BRIEF.md` to reflect current state.
+Update `./ae-cc/planning/BRIEF.md` to reflect current state.
 
 Add/update "Current State" section at top (after YAML if present):
 
@@ -203,7 +203,7 @@ Show diff, confirm changes.
 </step>
 
 <step name="reorganize_roadmap">
-Update `.planning/ROADMAP.md` to group completed milestone phases.
+Update `./ae-cc/planning/ROADMAP.md` to group completed milestone phases.
 
 Add milestone headers and collapse completed work:
 
@@ -262,7 +262,7 @@ Key accomplishments:
 - [Item 2]
 - [Item 3]
 
-See .planning/MILESTONES.md for full details.
+See ./ae-cc/planning/MILESTONES.md for full details.
 EOF
 )"
 ```
@@ -281,9 +281,9 @@ git push origin v[X.Y]
 Commit milestone completion (MILESTONES.md + BRIEF.md + ROADMAP.md updates):
 
 ```bash
-git add .planning/MILESTONES.md
-git add .planning/BRIEF.md
-git add .planning/ROADMAP.md
+git add ./ae-cc/planning/MILESTONES.md
+git add ./ae-cc/planning/BRIEF.md
+git add ./ae-cc/planning/ROADMAP.md
 git commit -m "$(cat <<'EOF'
 chore: milestone v[X.Y] [Name] shipped
 
@@ -306,7 +306,7 @@ Shipped:
 - [N] phases ([M] plans, [P] tasks)
 - [One sentence of what shipped]
 
-Summary: .planning/MILESTONES.md
+Summary: ./ae-cc/planning/MILESTONES.md
 Tag: v[X.Y]
 
 Next steps:

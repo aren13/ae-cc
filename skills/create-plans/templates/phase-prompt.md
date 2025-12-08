@@ -1,6 +1,6 @@
 # Phase Prompt Template
 
-Copy and fill this structure for `.planning/phases/XX-name/{phase}-{plan}-PLAN.md`:
+Copy and fill this structure for `./ae-cc/planning/phases/XX-name/{phase}-{plan}-PLAN.md`:
 
 **Naming:** Use `{phase}-{plan}-PLAN.md` format (e.g., `01-02-PLAN.md` for Phase 1, Plan 2)
 
@@ -26,10 +26,10 @@ Output: [What artifacts will be created]
 </execution_context>
 
 <context>
-@.planning/BRIEF.md
-@.planning/ROADMAP.md
+@./ae-cc/planning/BRIEF.md
+@./ae-cc/planning/ROADMAP.md
 [If research exists:]
-@.planning/phases/XX-name/FINDINGS.md
+@./ae-cc/planning/phases/XX-name/FINDINGS.md
 [Relevant source files:]
 @src/path/to/relevant.ts
 </context>
@@ -108,7 +108,7 @@ Before declaring phase complete:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`:
+After completion, create `./ae-cc/planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`:
 
 # Phase [X] Plan [Y]: [Name] Summary
 
@@ -172,8 +172,8 @@ Output: Working Next.js app with JWT auth, protected routes, and user model.
 </execution_context>
 
 <context>
-@.planning/BRIEF.md
-@.planning/ROADMAP.md
+@./ae-cc/planning/BRIEF.md
+@./ae-cc/planning/ROADMAP.md
 @src/lib/db.ts
 </context>
 
@@ -213,7 +213,7 @@ Before declaring phase complete:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/01-foundation/01-01-SUMMARY.md`
+After completion, create `./ae-cc/planning/phases/01-foundation/01-01-SUMMARY.md`
 </output>
 ```
 </good_examples>

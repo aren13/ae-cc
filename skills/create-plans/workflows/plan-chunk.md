@@ -14,7 +14,7 @@ to focus on "what's next" without replanning the whole phase.
 <step name="find_current_position">
 Read the phase plan:
 ```bash
-cat .planning/phases/XX-current/PLAN.md
+cat ./ae-cc/planning/phases/XX-current/PLAN.md
 ```
 
 Identify:

@@ -180,7 +180,7 @@ Include `argument-hint: [description]` in frontmatter and reference `$ARGUMENTS`
 <commands_without_arguments>
 
 **Self-contained procedures:**
-- `/check-todos` - Operates on known file (TO-DOS.md)
+- `/check-todos` - Operates on known file (./ae-cc/TO-DOS.md)
 - `/first-principles` - Operates on current conversation
 - `/whats-next` - Analyzes current context
 

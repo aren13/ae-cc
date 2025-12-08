@@ -10,7 +10,7 @@ allowed-tools:
 
 ## Instructions
 
-1. Read TO-DOS.md in the working directory (if doesn't exist, say "No outstanding todos" and exit)
+1. Read ./ae-cc/TO-DOS.md in the working directory (if doesn't exist, say "No outstanding todos" and exit)
 
 2. Parse and display todos:
    - Extract all list items starting with `- **` (active todos)
@@ -39,7 +39,7 @@ allowed-tools:
    - Wait for user response
 
 6. Handle user choice:
-   - **Option "Invoke skill" or "Start working"**: Remove todo from TO-DOS.md (and h2 heading if section becomes empty), then begin work (invoke skill if applicable, or proceed directly)
+   - **Option "Invoke skill" or "Start working"**: Remove todo from ./ae-cc/TO-DOS.md (and h2 heading if section becomes empty), then begin work (invoke skill if applicable, or proceed directly)
    - **Option "Brainstorm approach"**: Keep todo in file, invoke `/brainstorm` with the todo description as argument
    - **Option "Put it back"**: Keep todo in file, return to step 2 to display the full list again
 

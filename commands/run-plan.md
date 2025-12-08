@@ -3,7 +3,7 @@ type: prompt
 description: Execute a PLAN.md file directly without loading planning skill context
 arguments:
   - name: plan_path
-    description: Path to PLAN.md file (e.g., .planning/phases/07-sidebar-reorganization/07-01-PLAN.md)
+    description: Path to PLAN.md file (e.g., ./ae-cc/planning/phases/07-sidebar-reorganization/07-01-PLAN.md)
     required: true
 ---
 

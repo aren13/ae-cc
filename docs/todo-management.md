@@ -12,7 +12,7 @@ When you're deep in a conversation and spot a bug, think of a new feature, or no
 
 ### `/add-to-todos [optional description]`
 
-Captures the current conversation context as a structured todo item in `TO-DOS.md`.
+Captures the current conversation context as a structured todo item in `./ae-cc/TO-DOS.md`.
 
 **What it captures:**
 - Specific problem or task from conversation
@@ -77,7 +77,7 @@ cp add-to-todos.md ~/.claude/commands/
 cp check-todos.md ~/.claude/commands/
 ```
 
-Once installed, the commands are available everywhere. Each project gets its own `TO-DOS.md` in its working directory - todos are captured per-project automatically.
+Once installed, the commands are available everywhere. Each project gets its own `./ae-cc/TO-DOS.md` in its working directory - todos are captured per-project automatically.
 
 ## Example Workflow
 
@@ -127,10 +127,10 @@ Claude loads:
 **Per-project (created automatically in working directory):**
 ```
 /your/project/
-  TO-DOS.md              # Project-specific todos
+  ./ae-cc/TO-DOS.md              # Project-specific todos
 
 /another/project/
-  TO-DOS.md              # Different project's todos
+  ./ae-cc/TO-DOS.md              # Different project's todos
 ```
 
 Each project maintains its own todo list. The commands are global, the todos are local.

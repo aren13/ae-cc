@@ -24,7 +24,7 @@ Ask: What do we need to learn before we can plan this phase?
 
 <step name="create_research_prompt">
 Use templates/research-prompt.md.
-Write to `.planning/phases/XX-name/RESEARCH.md`
+Write to `./ae-cc/planning/phases/XX-name/RESEARCH.md`
 
 Include:
 - Clear research objective
@@ -42,7 +42,7 @@ Run the research prompt:
 </step>
 
 <step name="create_findings">
-Write `.planning/phases/XX-name/FINDINGS.md`:
+Write `./ae-cc/planning/phases/XX-name/FINDINGS.md`:
 - Summary with recommendation
 - Key findings with sources
 - Code examples if applicable
@@ -83,7 +83,7 @@ If "address first": Gather user input on questions, update findings.
 
 <step name="offer_next">
 ```
-Research complete: .planning/phases/XX-name/FINDINGS.md
+Research complete: ./ae-cc/planning/phases/XX-name/FINDINGS.md
 Recommendation: [one-liner]
 Confidence: [level]
 

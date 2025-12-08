@@ -6,8 +6,8 @@
 2. references/plan-format.md
 3. references/scope-estimation.md
 4. references/checkpoints.md
-5. Read `.planning/ROADMAP.md`
-6. Read `.planning/BRIEF.md`
+5. Read `./ae-cc/planning/ROADMAP.md`
+6. Read `./ae-cc/planning/BRIEF.md`
 
 **If domain expertise should be loaded (determined by intake):**
 7. Read domain SKILL.md: `~/.claude/skills/expertise/[domain]/SKILL.md`
@@ -28,8 +28,8 @@ gets transformed into a prompt.
 <step name="identify_phase">
 Check roadmap for phases:
 ```bash
-cat .planning/ROADMAP.md
-ls .planning/phases/
+cat ./ae-cc/planning/ROADMAP.md
+ls ./ae-cc/planning/phases/
 ```
 
 If multiple phases available, ask which one to plan.
@@ -198,13 +198,13 @@ Loop until "Create phase prompt" selected.
 Use template from `templates/phase-prompt.md`.
 
 **If single plan:**
-Write to `.planning/phases/XX-name/{phase}-01-PLAN.md`
+Write to `./ae-cc/planning/phases/XX-name/{phase}-01-PLAN.md`
 
 **If multiple plans:**
 Write multiple files:
-- `.planning/phases/XX-name/{phase}-01-PLAN.md`
-- `.planning/phases/XX-name/{phase}-02-PLAN.md`
-- `.planning/phases/XX-name/{phase}-03-PLAN.md`
+- `./ae-cc/planning/phases/XX-name/{phase}-01-PLAN.md`
+- `./ae-cc/planning/phases/XX-name/{phase}-02-PLAN.md`
+- `./ae-cc/planning/phases/XX-name/{phase}-03-PLAN.md`
 
 Each file follows the template structure:
 
@@ -231,12 +231,12 @@ Output: [What artifacts will be created by this plan]
 </execution_context>
 
 <context>
-@.planning/BRIEF.md
-@.planning/ROADMAP.md
+@./ae-cc/planning/BRIEF.md
+@./ae-cc/planning/ROADMAP.md
 [If research done:]
-@.planning/phases/XX-name/FINDINGS.md
+@./ae-cc/planning/phases/XX-name/FINDINGS.md
 [If continuing from previous plan:]
-@.planning/phases/XX-name/{phase}-{prev}-SUMMARY.md
+@./ae-cc/planning/phases/XX-name/{phase}-{prev}-SUMMARY.md
 [Relevant source files:]
 @src/path/to/relevant.ts
 </context>
@@ -255,7 +255,7 @@ Output: [What artifacts will be created by this plan]
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
+After completion, create `./ae-cc/planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 [Include summary structure from template]
 </output>
 ```
@@ -269,7 +269,7 @@ After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 <step name="offer_next">
 **If single plan:**
 ```
-Phase plan created: .planning/phases/XX-name/{phase}-01-PLAN.md
+Phase plan created: ./ae-cc/planning/phases/XX-name/{phase}-01-PLAN.md
 [X] tasks defined.
 
 What's next?

@@ -179,15 +179,15 @@ See: references/git-integration.md
 git rev-parse --git-dir 2>/dev/null || echo "NO_GIT_REPO"
 
 # Check for planning structure
-ls -la .planning/ 2>/dev/null
-ls -la .planning/phases/ 2>/dev/null
+ls -la ./ae-cc/planning/ 2>/dev/null
+ls -la ./ae-cc/planning/phases/ 2>/dev/null
 
 # Find any continue-here files
 find . -name ".continue-here.md" -type f 2>/dev/null
 
 # Check for existing artifacts
-[ -f .planning/BRIEF.md ] && echo "BRIEF: exists"
-[ -f .planning/ROADMAP.md ] && echo "ROADMAP: exists"
+[ -f ./ae-cc/planning/BRIEF.md ] && echo "BRIEF: exists"
+[ -f ./ae-cc/planning/ROADMAP.md ] && echo "ROADMAP: exists"
 ```
 
 **If NO_GIT_REPO detected:**
@@ -317,7 +317,7 @@ Based on scan results, present context-aware options:
 
 **If handoff found:**
 ```
-Found handoff: .planning/phases/XX/.continue-here.md
+Found handoff: ./ae-cc/planning/phases/XX/.continue-here.md
 [Summary of state from handoff]
 
 1. Resume from handoff
@@ -400,10 +400,10 @@ SUMMARY.md        → Outcome (existence = phase complete)
 </hierarchy>
 
 <output_structure>
-All planning artifacts go in `.planning/`:
+All planning artifacts go in `./ae-cc/planning/`:
 
 ```
-.planning/
+./ae-cc/planning/
 ├── BRIEF.md                    # Human vision
 ├── ROADMAP.md                  # Phase structure + tracking
 └── phases/
