@@ -15,6 +15,12 @@
       "description": "Comprehensive collection of 27 commands, 7 autonomous skills, and 3 specialized agents for meta-prompting, hierarchical planning, systematic debugging, and Claude Code extensibility",
       "version": "1.0.1",
       "strict": true
+    },
+    {
+      "name": "reply-style",
+      "source": "./mods/reply-style",
+      "description": "Desktop mod: verdict and action boxes, colored section titles and a right-aligned prompt bubble for Verdict-First replies",
+      "version": "0.2.0"
     }
   ]
 }
