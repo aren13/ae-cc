@@ -1,0 +1,10 @@
+{
+  "name": "reply-style",
+  "version": "0.2.0",
+  "description": "Styles replies and prompts on the desktop: verdict and action boxes, section titles, a prompt bubble",
+  "author": {
+    "name": "Aren",
+    "email": "ae@codemose.com"
+  },
+  "types": "./types/index.d.ts"
+}
