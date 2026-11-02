@@ -107,7 +107,7 @@ export type Run = { text: string; bold?: boolean; code?: boolean }
 
 export type Piece =
   | { kind: 'prose'; runs: Run[] }
-  | { kind: 'list'; items: { marker: string; runs: Run[] }[] }
+  | { kind: 'list'; items: { marker: string; runs: Run[] | null; text: string }[] }
   | { kind: 'markdown'; text: string }
 
 // Links, images, HTML and bare URLs need the Markdown element to stay pressable or drawn.
@@ -155,14 +155,13 @@ export function bodyPieces(text: string): Piece[] {
     const lines = p.split('\n')
 
     if (lines.every(l => LIST_ITEM.test(l))) {
+      // An item with a link keeps its own Markdown element, so the rest of the list stays soft.
       const items = lines.map(l => {
         const [, marker = '', rest = ''] = LIST_ITEM.exec(l)!
-        return { marker: /^\d/.test(marker) ? marker : '•', runs: inlineRuns(rest) }
+        return { marker: /^\d/.test(marker) ? marker : '•', runs: inlineRuns(rest), text: rest }
       })
-      if (items.every(it => it.runs !== null)) {
-        pieces.push({ kind: 'list', items: items.map(it => ({ marker: it.marker, runs: it.runs! })) })
-        continue
-      }
+      pieces.push({ kind: 'list', items })
+      continue
     }
 
     if (!lines.some(l => BLOCK_START.test(l) || LIST_ITEM.test(l))) {

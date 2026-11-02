@@ -58,6 +58,13 @@ test('prose and flat lists become Text pieces; tables and code stay Markdown', (
   expect(bodyPieces(md)[0]).toEqual({ kind: 'prose', runs: [{ text: 'One two.' }] })
 })
 
-test('a list with a link falls back to Markdown', () => {
-  expect(bodyPieces('- see [x](https://a.b)\n- y').map(p => p.kind)).toEqual(['markdown'])
+test('a list item with a link keeps its markdown; the others stay runs', () => {
+  const [list] = bodyPieces('- see [x](https://a.b)\n- y')
+  expect(list).toEqual({
+    kind: 'list',
+    items: [
+      { marker: '•', runs: null, text: 'see [x](https://a.b)' },
+      { marker: '•', runs: [{ text: 'y' }], text: 'y' },
+    ],
+  })
 })
