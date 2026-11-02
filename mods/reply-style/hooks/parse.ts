@@ -102,3 +102,79 @@ export function collapsePrompt(text: string): { head: string; hiddenLines: numbe
 
   return { head: head + '…', hiddenLines: Math.max(1, lines.length - shownLines) }
 }
+
+export type Run = { text: string; bold?: boolean; code?: boolean }
+
+export type Piece =
+  | { kind: 'prose'; runs: Run[] }
+  | { kind: 'list'; items: { marker: string; runs: Run[] }[] }
+  | { kind: 'markdown'; text: string }
+
+// Links, images, HTML and bare URLs need the Markdown element to stay pressable or drawn.
+const NEEDS_MARKDOWN = /\]\(|!\[|<[a-zA-Z/]|https?:\/\//
+const BLOCK_START = /^(#{1,6}\s|>|\||```|~~~|\s{2,}\S|---\s*$|\*\*\*\s*$)/
+const LIST_ITEM = /^([-*+]|\d{1,3}[.)])\s+(.*)$/
+
+// Splits inline markdown into plain, bold and code runs, or null when it needs the Markdown element.
+export function inlineRuns(text: string): Run[] | null {
+  if (NEEDS_MARKDOWN.test(text)) {
+    return null
+  }
+
+  const runs: Run[] = []
+  const re = /`([^`\n]+)`|\*\*([^*\n]+)\*\*/g
+  let last = 0
+  for (let m = re.exec(text); m !== null; m = re.exec(text)) {
+    if (m.index > last) {
+      runs.push({ text: text.slice(last, m.index) })
+    }
+    runs.push(m[1] !== undefined ? { text: m[1], code: true } : { text: m[2]!, bold: true })
+    last = re.lastIndex
+  }
+  if (last < text.length) {
+    runs.push({ text: text.slice(last) })
+  }
+
+  return runs
+}
+
+// Classifies markdown paragraphs into prose and flat lists drawn as Text, leaving the rest to Markdown.
+export function bodyPieces(text: string): Piece[] {
+  const pieces: Piece[] = []
+
+  const pushMarkdown = (md: string) => {
+    const last = pieces[pieces.length - 1]
+    if (last?.kind === 'markdown') {
+      last.text += '\n\n' + md
+    } else {
+      pieces.push({ kind: 'markdown', text: md })
+    }
+  }
+
+  for (const p of paragraphs(text)) {
+    const lines = p.split('\n')
+
+    if (lines.every(l => LIST_ITEM.test(l))) {
+      const items = lines.map(l => {
+        const [, marker = '', rest = ''] = LIST_ITEM.exec(l)!
+        return { marker: /^\d/.test(marker) ? marker : '•', runs: inlineRuns(rest) }
+      })
+      if (items.every(it => it.runs !== null)) {
+        pieces.push({ kind: 'list', items: items.map(it => ({ marker: it.marker, runs: it.runs! })) })
+        continue
+      }
+    }
+
+    if (!lines.some(l => BLOCK_START.test(l) || LIST_ITEM.test(l))) {
+      const runs = inlineRuns(lines.join(' '))
+      if (runs !== null) {
+        pieces.push({ kind: 'prose', runs })
+        continue
+      }
+    }
+
+    pushMarkdown(p)
+  }
+
+  return pieces
+}

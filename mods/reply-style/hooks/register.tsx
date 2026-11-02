@@ -1,11 +1,16 @@
 import { atom, memberOf, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
 
-import { collapsePrompt, parseReply, plain } from './parse'
+import { bodyPieces, collapsePrompt, parseReply, plain } from './parse'
+import type { Run } from './parse'
 
 // Darker, less saturated green and an off-white text: lower glare for astigmatism than white on #3B6637.
 const BUBBLE_GREEN = '#2F4A2C'
 const BUBBLE_TEXT = '#E6E4DC'
+
+// Reply prose in the same off-white family, softer than the app's #EFEFEF on #191919.
+const REPLY_TEXT = '#D6D4CC'
+const CODE_BG = '#2A2A28'
 
 // Past this many characters the bubble stops growing and wraps at 70% of the row.
 const BUBBLE_WRAP_AT = 60
@@ -23,11 +28,53 @@ export const register: Register = on => {
     }
 
     const blocks = parseReply(e.props.text)
-    if (!blocks.some(b => b.kind !== 'markdown')) {
-      return next(e)
-    }
-
     const { Box, Text, Markdown } = $.ui.resolve(e)
+
+    const runs = (rs: Run[]) =>
+      rs.map(r =>
+        r.code ? (
+          <Text mono backgroundColor={CODE_BG}>
+            {r.text}
+          </Text>
+        ) : r.bold ? (
+          <Text weight="semibold">{r.text}</Text>
+        ) : (
+          r.text
+        ),
+      )
+
+    // Prose and flat lists draw as soft Text; tables, code and links keep the Markdown element.
+    const body = (md: string, key: string) => (
+      <Box key={key} flexDirection="column" gap={1}>
+        {bodyPieces(md).map((p, j) => {
+          switch (p.kind) {
+            case 'prose':
+              return (
+                <Text key={`p${j}`} color={REPLY_TEXT} weight="medium">
+                  {runs(p.runs)}
+                </Text>
+              )
+            case 'list':
+              return (
+                <Box key={`p${j}`} flexDirection="column">
+                  {p.items.map((it, k) => (
+                    <Box key={`i${k}`} flexDirection="row" gap={1}>
+                      <Text color={REPLY_TEXT}>{it.marker}</Text>
+                      <Box flexShrink={1}>
+                        <Text color={REPLY_TEXT} weight="medium">
+                          {runs(it.runs)}
+                        </Text>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
+              )
+            case 'markdown':
+              return <Markdown key={`p${j}`} text={p.text} />
+          }
+        })}
+      </Box>
+    )
 
     return (
       <Box flexDirection="column" gap={1}>
@@ -40,7 +87,7 @@ export const register: Register = on => {
                     <Text bold color={b.label === 'Decision' ? 'permission' : 'claude'}>
                       {b.label.toUpperCase()}
                     </Text>
-                    {`  ${plain(b.text)}`}
+                    <Text color={REPLY_TEXT} weight="medium">{`  ${plain(b.text)}`}</Text>
                   </Text>
                 </Box>
               )
@@ -50,7 +97,7 @@ export const register: Register = on => {
                   <Text bold color="claude">
                     {b.label}
                   </Text>
-                  {b.body.trim() === '' ? null : <Markdown text={b.body} />}
+                  {b.body.trim() === '' ? null : body(b.body, 'body')}
                 </Box>
               )
             case 'action':
@@ -59,11 +106,11 @@ export const register: Register = on => {
                   <Text bold color="warning">
                     ACTION NEEDED
                   </Text>
-                  {b.body.trim() === '' ? null : <Markdown text={b.body} />}
+                  {b.body.trim() === '' ? null : body(b.body, 'body')}
                 </Box>
               )
             case 'markdown':
-              return <Markdown key={`b${i}`} text={b.text} />
+              return body(b.text, `b${i}`)
           }
         })}
       </Box>
