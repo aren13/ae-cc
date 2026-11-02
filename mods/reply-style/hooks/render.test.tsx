@@ -71,3 +71,14 @@ test('a decision gets its own verdict box', async $ => {
   })
   expect(await ui.find({ type: 'Text', text: /DECISION/ })).toBeDefined()
 })
+
+test('plain reply prose draws in the soft reply color', async $ => {
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'AssistantMessage',
+    props: { text: 'Plain answer with `code`.\n\n- one\n- two', isFirstOfReply: true },
+  })
+  expect((await ui.find({ type: 'Text', text: /Plain answer/ }))?.props.color).toBe('#D6D4CC')
+  expect((await ui.find({ type: 'Text', text: /^two$/ }))?.props.color).toBe('#D6D4CC')
+})

@@ -20,7 +20,7 @@
       "name": "reply-style",
       "source": "./mods/reply-style",
       "description": "Desktop mod: verdict and action boxes, colored section titles and a right-aligned prompt bubble for Verdict-First replies",
-      "version": "0.2.1"
+      "version": "0.2.2"
     }
   ]
 }

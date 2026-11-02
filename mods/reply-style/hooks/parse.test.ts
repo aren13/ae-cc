@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { collapsePrompt, paragraphs, parseReply } from './parse'
+import { bodyPieces, collapsePrompt, inlineRuns, paragraphs, parseReply } from './parse'
 
 const REPLY = [
   '**Verdict:** Ship it.',
@@ -36,4 +36,28 @@ test('short prompts are not collapsed', () => {
 test('long prompts keep six lines and count the rest', () => {
   const text = Array.from({ length: 20 }, (_, i) => `line ${i}`).join('\n')
   expect(collapsePrompt(text)).toEqual({ head: text.split('\n').slice(0, 6).join('\n') + '…', hiddenLines: 14 })
+})
+
+test('splits bold and code runs', () => {
+  expect(inlineRuns('Run `npm test` **now** please')).toEqual([
+    { text: 'Run ' },
+    { text: 'npm test', code: true },
+    { text: ' ' },
+    { text: 'now', bold: true },
+    { text: ' please' },
+  ])
+})
+
+test('links stay with the Markdown element', () => {
+  expect(inlineRuns('See [the PR](https://github.com/a/b/pull/1).')).toBeNull()
+})
+
+test('prose and flat lists become Text pieces; tables and code stay Markdown', () => {
+  const md = ['One\ntwo.', '- **A:** x\n- B', '| a |\n|---|', '```\ncode\n```'].join('\n\n')
+  expect(bodyPieces(md).map(p => p.kind)).toEqual(['prose', 'list', 'markdown'])
+  expect(bodyPieces(md)[0]).toEqual({ kind: 'prose', runs: [{ text: 'One two.' }] })
+})
+
+test('a list with a link falls back to Markdown', () => {
+  expect(bodyPieces('- see [x](https://a.b)\n- y').map(p => p.kind)).toEqual(['markdown'])
 })
