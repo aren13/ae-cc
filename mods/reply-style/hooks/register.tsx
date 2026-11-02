@@ -61,9 +61,13 @@ export const register: Register = on => {
                     <Box key={`i${k}`} flexDirection="row" gap={1}>
                       <Text color={REPLY_TEXT}>{it.marker}</Text>
                       <Box flexShrink={1}>
-                        <Text color={REPLY_TEXT} weight="medium">
-                          {runs(it.runs)}
-                        </Text>
+                        {it.runs === null ? (
+                          <Markdown text={it.text} />
+                        ) : (
+                          <Text color={REPLY_TEXT} weight="medium">
+                            {runs(it.runs)}
+                          </Text>
+                        )}
                       </Box>
                     </Box>
                   ))}
