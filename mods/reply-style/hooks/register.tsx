@@ -3,8 +3,9 @@ import type { Register } from 'claude-code'
 
 import { collapsePrompt, parseReply, plain } from './parse'
 
-// Muted green read off the person's reference screenshot (approximate).
-const BUBBLE_GREEN = '#3B6637'
+// Darker, less saturated green and an off-white text: lower glare for astigmatism than white on #3B6637.
+const BUBBLE_GREEN = '#2F4A2C'
+const BUBBLE_TEXT = '#E6E4DC'
 
 // Past this many characters the bubble stops growing and wraps at 70% of the row.
 const BUBBLE_WRAP_AT = 60
@@ -92,7 +93,9 @@ export const register: Register = on => {
           paddingY={1}
         >
           <Box flexDirection="column" gap={1}>
-            <Text color="#FFFFFF">{text}</Text>
+            <Text color={BUBBLE_TEXT} weight="medium">
+              {text}
+            </Text>
             {collapsed === null ? null : (
               <Button
                 key="toggle"
