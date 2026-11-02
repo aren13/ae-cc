@@ -58,7 +58,7 @@ export const register: Register = on => {
               return (
                 <Box key={`p${j}`} flexDirection="column">
                   {p.items.map((it, k) => (
-                    <Box key={`i${k}`} flexDirection="row" gap={1}>
+                    <Box key={`i${k}`} flexDirection="row" alignItems="flex-start" gap={1}>
                       <Text color={REPLY_TEXT}>{it.marker}</Text>
                       <Box flexShrink={1}>
                         {it.runs === null ? (
