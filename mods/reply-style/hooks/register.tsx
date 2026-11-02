@@ -28,11 +28,13 @@ export const register: Register = on => {
     }
 
     const blocks = parseReply(e.props.text)
-    const { Box, Text, Markdown } = $.ui.resolve(e)
+    const { Box, Text, Markdown, Link } = $.ui.resolve(e)
 
     const runs = (rs: Run[]) =>
       rs.map(r =>
-        r.code ? (
+        r.href !== undefined ? (
+          <Link href={r.href}>{r.text}</Link>
+        ) : r.code ? (
           <Text mono backgroundColor={CODE_BG}>
             {r.text}
           </Text>
