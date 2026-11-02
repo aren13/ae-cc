@@ -103,32 +103,40 @@ export function collapsePrompt(text: string): { head: string; hiddenLines: numbe
   return { head: head + '…', hiddenLines: Math.max(1, lines.length - shownLines) }
 }
 
-export type Run = { text: string; bold?: boolean; code?: boolean }
+export type Run = { text: string; bold?: boolean; code?: boolean; href?: string }
 
 export type Piece =
   | { kind: 'prose'; runs: Run[] }
   | { kind: 'list'; items: { marker: string; runs: Run[] | null; text: string }[] }
   | { kind: 'markdown'; text: string }
 
-// Links, images, HTML and bare URLs need the Markdown element to stay pressable or drawn.
-const NEEDS_MARKDOWN = /\]\(|!\[|<[a-zA-Z/]|https?:\/\//
+// Images, HTML and links the desktop Link cannot open (not https) need the Markdown element.
+const NEEDS_MARKDOWN = /!\[|<[a-zA-Z/]|\]\((?!https:\/\/)|http:\/\//
 const BLOCK_START = /^(#{1,6}\s|>|\||```|~~~|\s{2,}\S|---\s*$|\*\*\*\s*$)/
 const LIST_ITEM = /^([-*+]|\d{1,3}[.)])\s+(.*)$/
 
-// Splits inline markdown into plain, bold and code runs, or null when it needs the Markdown element.
+// Splits inline markdown into plain, bold, code and https link runs, or null when it needs the Markdown element.
 export function inlineRuns(text: string): Run[] | null {
   if (NEEDS_MARKDOWN.test(text)) {
     return null
   }
 
   const runs: Run[] = []
-  const re = /`([^`\n]+)`|\*\*([^*\n]+)\*\*/g
+  const re = /`([^`\n]+)`|\*\*([^*\n]+)\*\*|\[([^\]\n]+)\]\((https:\/\/[^)\s]+)\)|(https:\/\/[^\s)<>]*[^\s)<>.,;:!?])/g
   let last = 0
   for (let m = re.exec(text); m !== null; m = re.exec(text)) {
     if (m.index > last) {
       runs.push({ text: text.slice(last, m.index) })
     }
-    runs.push(m[1] !== undefined ? { text: m[1], code: true } : { text: m[2]!, bold: true })
+    if (m[1] !== undefined) {
+      runs.push({ text: m[1], code: true })
+    } else if (m[2] !== undefined) {
+      runs.push({ text: m[2], bold: true })
+    } else if (m[4] !== undefined) {
+      runs.push({ text: m[3]!, href: m[4] })
+    } else {
+      runs.push({ text: m[5]!, href: m[5]! })
+    }
     last = re.lastIndex
   }
   if (last < text.length) {

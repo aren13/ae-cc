@@ -48,8 +48,19 @@ test('splits bold and code runs', () => {
   ])
 })
 
-test('links stay with the Markdown element', () => {
-  expect(inlineRuns('See [the PR](https://github.com/a/b/pull/1).')).toBeNull()
+test('https links become link runs', () => {
+  expect(inlineRuns('See [the PR](https://github.com/a/b/pull/1) or https://x.y/z.')).toEqual([
+    { text: 'See ' },
+    { text: 'the PR', href: 'https://github.com/a/b/pull/1' },
+    { text: ' or ' },
+    { text: 'https://x.y/z', href: 'https://x.y/z' },
+    { text: '.' },
+  ])
+})
+
+test('non-https links stay with the Markdown element', () => {
+  expect(inlineRuns('Open [the file](file:///tmp/a.md).')).toBeNull()
+  expect(inlineRuns('Plain http://x.y')).toBeNull()
 })
 
 test('prose and flat lists become Text pieces; tables and code stay Markdown', () => {
@@ -58,12 +69,12 @@ test('prose and flat lists become Text pieces; tables and code stay Markdown', (
   expect(bodyPieces(md)[0]).toEqual({ kind: 'prose', runs: [{ text: 'One two.' }] })
 })
 
-test('a list item with a link keeps its markdown; the others stay runs', () => {
-  const [list] = bodyPieces('- see [x](https://a.b)\n- y')
+test('a list item with a file link keeps its markdown; the others stay runs', () => {
+  const [list] = bodyPieces('- see [x](file:///a.b)\n- y')
   expect(list).toEqual({
     kind: 'list',
     items: [
-      { marker: '•', runs: null, text: 'see [x](https://a.b)' },
+      { marker: '•', runs: null, text: 'see [x](file:///a.b)' },
       { marker: '•', runs: [{ text: 'y' }], text: 'y' },
     ],
   })

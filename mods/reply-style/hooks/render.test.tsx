@@ -83,12 +83,13 @@ test('plain reply prose draws in the soft reply color', async $ => {
   expect((await ui.find({ type: 'Text', text: /^two$/ }))?.props.color).toBe('#D6D4CC')
 })
 
-test('a list keeps soft items beside one with a link', async $ => {
+test('a paragraph with an https link stays soft and keeps the link', async $ => {
   const ui = await $.ui.mount({
     plugin: 'reply-style',
     surface: 'desktop',
     component: 'AssistantMessage',
-    props: { text: '- **Plain:** soft\n- see [the PR](https://github.com/a/b/pull/1)', isFirstOfReply: true },
+    props: { text: 'Merged in [the PR](https://github.com/a/b/pull/1) today.', isFirstOfReply: true },
   })
-  expect((await ui.find({ type: 'Text', text: /soft/ }))?.props.color).toBe('#D6D4CC')
+  expect((await ui.find({ type: 'Text', text: /Merged in/ }))?.props.color).toBe('#D6D4CC')
+  expect((await ui.find({ type: 'Link' }))?.props.href).toBe('https://github.com/a/b/pull/1')
 })
