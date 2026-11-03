@@ -1,5 +1,5 @@
 import { atom, memberOf, read, update } from 'claude-code'
-import type { Register } from 'claude-code'
+import type { EngineInterface, Register } from 'claude-code'
 
 import { bodyPieces, collapsePrompt, parseReply, plain } from './parse'
 import type { Run } from './parse'
@@ -21,7 +21,37 @@ const isPromptOpen = atom({ plugin: 'reply-style', key: 'isPromptOpen' } as cons
 // The desktop app stamps the person's prompts as `sdk`; the terminal as `composer`.
 const PROMPT_KINDS = new Set(['composer', 'sdk', 'bridge'])
 
+// Prompts sent with images or documents, by their text. Their row props carry no attachments and the
+// desktop draws those only in its own row, so such a prompt keeps the engine's drawing.
+const sentWithMedia = new Set<string>()
+let history: Promise<void> | undefined
+
+const isMedia = (b: { type: string }) => b.type === 'image' || b.type === 'document'
+
+const hasMedia = async ($: EngineInterface, text: string) => {
+  history ??= $.session
+    .messages({ as: 'api' })
+    .then(ms => {
+      for (const m of ms) {
+        if (m.role !== 'user' || !m.content.some(isMedia)) continue
+        for (const b of m.content) {
+          if (b.type === 'text' && typeof b.text === 'string') sentWithMedia.add(b.text.trim())
+        }
+      }
+    })
+    .catch(() => undefined)
+  await history
+  return sentWithMedia.has(text.trim())
+}
+
 export const register: Register = on => {
+  on('prompt.submit', ($, e, next) => {
+    if (e.attachments?.length) sentWithMedia.add(e.text.trim())
+    // Read the history again on the next draw, so a prompt stored with media is found either way.
+    history = undefined
+    return next(e)
+  })
+
   on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
     if (e.surface !== 'desktop' || e.props.isSummary) {
       return next(e)
@@ -124,7 +154,7 @@ export const register: Register = on => {
   })
 
   on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
-    if (e.surface !== 'desktop' || !PROMPT_KINDS.has(e.props.origin.kind)) {
+    if (e.surface !== 'desktop' || !PROMPT_KINDS.has(e.props.origin.kind) || (await hasMedia($, e.props.text))) {
       return next(e)
     }
 

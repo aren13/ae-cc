@@ -93,3 +93,20 @@ test('a paragraph with an https link stays soft and keeps the link', async $ => 
   expect((await ui.find({ type: 'Text', text: /Merged in/ }))?.props.color).toBe('#D6D4CC')
   expect((await ui.find({ type: 'Link' }))?.props.href).toBe('https://github.com/a/b/pull/1')
 })
+
+test('a prompt sent with an attachment keeps the desktop drawing', async ($, on) => {
+  on('prompt.submit', ($, e) => ({ text: e.text }))
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  await $.prompt.submit({ text: 'see this file', wait: false, origin: { kind: 'sdk' }, attachments: [{ type: 'image', mediaType: 'image/png', id: 'a1' }] })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'see this file', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^see this file$/ })).toBeUndefined()
+})
