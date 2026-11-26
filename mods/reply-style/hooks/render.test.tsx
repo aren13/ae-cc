@@ -110,3 +110,55 @@ test('a prompt sent with an attachment keeps the desktop drawing', async ($, on)
   expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
   expect(await ui.find({ type: 'Text', text: /^see this file$/ })).toBeUndefined()
 })
+
+test('an image-only prompt keeps the desktop drawing', async ($, on) => {
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: '', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+})
+
+test('a prompt stored with a document keeps the desktop drawing', async ($, on) => {
+  on('session.messages', () => ({
+    value: [
+    {
+      role: 'user',
+      content: [
+        { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: 'AA==' } },
+        { type: 'text', text: '<system-reminder>context</system-reminder>' },
+        { type: 'text', text: 'read this pdf' },
+      ],
+    },
+    ],
+  }))
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'read this pdf', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: /^read this pdf$/ })).toBeUndefined()
+})
+
+test('a text-only prompt in history still draws as a bubble', async ($, on) => {
+  on('session.messages', () => ({ value: [{ role: 'user', content: [{ type: 'text', text: 'just words' }] }] }))
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'just words', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /^just words$/ })).toBeDefined()
+})
