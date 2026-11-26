@@ -21,35 +21,67 @@ const isPromptOpen = atom({ plugin: 'reply-style', key: 'isPromptOpen' } as cons
 // The desktop app stamps the person's prompts as `sdk`; the terminal as `composer`.
 const PROMPT_KINDS = new Set(['composer', 'sdk', 'bridge'])
 
-// Prompts sent with images or documents, by their text. Their row props carry no attachments and the
-// desktop draws those only in its own row, so such a prompt keeps the engine's drawing.
+// Prompts sent with images, documents or audio, by their text. Their row props carry no attachments and
+// the desktop draws those only in its own row, so such a prompt keeps the engine's drawing.
 const sentWithMedia = new Set<string>()
 let history: Promise<void> | undefined
+let recent: { at: number; read: Promise<void> } | undefined
 
-const isMedia = (b: { type: string }) => b.type === 'image' || b.type === 'document'
+// How often a prompt not yet known to carry media re-reads the newest rows.
+const RECENT_EVERY_MS = 1000
 
-const hasMedia = async ($: EngineInterface, text: string) => {
-  history ??= $.session
-    .messages({ as: 'api' })
+const MEDIA = new Set(['image', 'document', 'audio'])
+
+type Block = { type: string; text?: unknown }
+
+// Records a user message that carries media under each of its text blocks.
+const remember = (content: unknown) => {
+  if (!Array.isArray(content)) return false
+  const blocks = content as Block[]
+  if (!blocks.some(b => MEDIA.has(b.type))) return false
+  const before = sentWithMedia.size
+  for (const b of blocks) {
+    if (b.type === 'text' && typeof b.text === 'string') sentWithMedia.add(b.text.trim())
+  }
+  return sentWithMedia.size > before
+}
+
+const scan = ($: EngineInterface, last?: number) =>
+  $.session
+    .messages(last === undefined ? { as: 'api' } : { as: 'api', last })
     .then(ms => {
-      for (const m of ms) {
-        if (m.role !== 'user' || !m.content.some(isMedia)) continue
-        for (const b of m.content) {
-          if (b.type === 'text' && typeof b.text === 'string') sentWithMedia.add(b.text.trim())
-        }
-      }
+      if (!Array.isArray(ms)) return
+      for (const m of ms) if (m.role === 'user') remember(m.content)
     })
     .catch(() => undefined)
+
+const hasMedia = async ($: EngineInterface, text: string) => {
+  const key = text.trim()
+  // A prompt with no text was sent for its attachment alone: the bubble would draw nothing.
+  if (key === '' || sentWithMedia.has(key)) return true
+  history ??= scan($)
   await history
-  return sentWithMedia.has(text.trim())
+  if (sentWithMedia.has(key)) return true
+  // The whole history is read once; rows stored after that read are found in the newest ones.
+  const now = Date.now()
+  if (recent === undefined || now - recent.at > RECENT_EVERY_MS) recent = { at: now, read: scan($, 8) }
+  await recent.read
+  return sentWithMedia.has(key)
 }
 
 export const register: Register = on => {
   on('prompt.submit', ($, e, next) => {
     if (e.attachments?.length) sentWithMedia.add(e.text.trim())
-    // Read the history again on the next draw, so a prompt stored with media is found either way.
-    history = undefined
     return next(e)
+  })
+
+  // A prompt stored with media after its row was drawn: draw that row again, as the desktop's own.
+  on('session.append', async ($, e, next) => {
+    const stored = await next(e)
+    if (e.agentId === undefined && e.message.type === 'user' && remember(e.message.content)) {
+      $.ui.invalidate('ui.render')
+    }
+    return stored
   })
 
   on('ui.render', { component: 'AssistantMessage' }, ($, e, next) => {
