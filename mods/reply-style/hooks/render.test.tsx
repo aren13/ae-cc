@@ -162,3 +162,27 @@ test('a text-only prompt in history still draws as a bubble', async ($, on) => {
   })
   expect(await ui.find({ type: 'Text', text: /^just words$/ })).toBeDefined()
 })
+
+test('a prompt with an attached file mention keeps the desktop drawing', async ($, on) => {
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: '@"/Users/me/Downloads/Gift Catalog.pdf"\ntest attachment', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+})
+
+test('an email address in a prompt still draws as a bubble', async $ => {
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'mail me at a@b.com', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /^mail me at a@b\.com$/ })).toBeDefined()
+})

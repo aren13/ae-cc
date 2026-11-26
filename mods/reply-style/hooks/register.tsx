@@ -55,10 +55,14 @@ const scan = ($: EngineInterface, last?: number) =>
     })
     .catch(() => undefined)
 
+// The desktop sends an attached file as a mention in the text, `@"/path/to/file"` or `@/path`,
+// and draws it as a file chip in its own row.
+const FILE_MENTION = /(^|\s)@("[^"\n]+"|\/\S+)/
+
 const hasMedia = async ($: EngineInterface, text: string) => {
   const key = text.trim()
   // A prompt with no text was sent for its attachment alone: the bubble would draw nothing.
-  if (key === '' || sentWithMedia.has(key)) return true
+  if (key === '' || FILE_MENTION.test(key) || sentWithMedia.has(key)) return true
   history ??= scan($)
   await history
   if (sentWithMedia.has(key)) return true
