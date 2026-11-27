@@ -186,3 +186,36 @@ test('an email address in a prompt still draws as a bubble', async $ => {
   })
   expect(await ui.find({ type: 'Text', text: /^mail me at a@b\.com$/ })).toBeDefined()
 })
+
+test('a prompt stored as text with a file mention keeps the desktop drawing without the mention', async ($, on) => {
+  on('session.messages', () => ({
+    value: [{ role: 'user', content: [{ type: 'text', text: '@"/Users/me/Downloads/Gift Catalog.pdf"\ntest attachment' }] }],
+  }))
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'test attachment', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+})
+
+test('a submitted prompt with a file mention keeps the desktop drawing without the mention', async ($, on) => {
+  on('prompt.submit', ($, e) => ({ text: e.text }))
+  on('ui.render', ($, e) => {
+    const { Text } = $.ui.resolve(e)
+    return <Text>engine row</Text>
+  })
+  await $.prompt.submit({ text: '@"/Users/me/a b.pdf"\nlook at it', wait: false, origin: { kind: 'sdk' } })
+  const ui = await $.ui.mount({
+    plugin: 'reply-style',
+    surface: 'desktop',
+    component: 'UserMessage',
+    props: { text: 'look at it', origin: { kind: 'sdk' }, isExpanded: true },
+  })
+  expect(await ui.find({ type: 'Text', text: /engine row/ })).toBeDefined()
+})
