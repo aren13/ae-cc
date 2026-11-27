@@ -34,15 +34,27 @@ const MEDIA = new Set(['image', 'document', 'audio'])
 
 type Block = { type: string; text?: unknown }
 
-// Records a user message that carries media under each of its text blocks.
+// The desktop sends an attached file as a mention in the text, `@"/path/to/file"` or `@/path`,
+// and draws it as a file chip in its own row; the row's text may come without the mention.
+const FILE_MENTION = /(^|\s)@("[^"\n]+"|\/\S+)/
+const FILE_MENTIONS = /(^|\s)@("[^"\n]+"|\/\S+)/g
+
+const withoutMentions = (text: string) => text.replace(FILE_MENTIONS, '$1').trim()
+
+// Records a prompt's text, with and without its file mentions.
+const add = (text: string) => {
+  sentWithMedia.add(text.trim())
+  sentWithMedia.add(withoutMentions(text))
+}
+
+// Records a user message that carries media or a file mention under each of its texts.
 const remember = (content: unknown) => {
-  if (!Array.isArray(content)) return false
-  const blocks = content as Block[]
-  if (!blocks.some(b => MEDIA.has(b.type))) return false
+  const blocks: Block[] =
+    typeof content === 'string' ? [{ type: 'text', text: content }] : Array.isArray(content) ? (content as Block[]) : []
+  const texts = blocks.flatMap(b => (b.type === 'text' && typeof b.text === 'string' ? [b.text] : []))
+  if (!blocks.some(b => MEDIA.has(b.type)) && !texts.some(t => FILE_MENTION.test(t))) return false
   const before = sentWithMedia.size
-  for (const b of blocks) {
-    if (b.type === 'text' && typeof b.text === 'string') sentWithMedia.add(b.text.trim())
-  }
+  for (const t of texts) add(t)
   return sentWithMedia.size > before
 }
 
@@ -54,10 +66,6 @@ const scan = ($: EngineInterface, last?: number) =>
       for (const m of ms) if (m.role === 'user') remember(m.content)
     })
     .catch(() => undefined)
-
-// The desktop sends an attached file as a mention in the text, `@"/path/to/file"` or `@/path`,
-// and draws it as a file chip in its own row.
-const FILE_MENTION = /(^|\s)@("[^"\n]+"|\/\S+)/
 
 const hasMedia = async ($: EngineInterface, text: string) => {
   const key = text.trim()
@@ -75,7 +83,7 @@ const hasMedia = async ($: EngineInterface, text: string) => {
 
 export const register: Register = on => {
   on('prompt.submit', ($, e, next) => {
-    if (e.attachments?.length) sentWithMedia.add(e.text.trim())
+    if (e.attachments?.length || FILE_MENTION.test(e.text)) add(e.text)
     return next(e)
   })
 
